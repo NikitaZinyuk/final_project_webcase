@@ -1,0 +1,73 @@
+{% extends "base_generic.html" %}
+{% block title %}Сообщения{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">Сообщения</h1>
+            <p class="lead mb-0"><a href="{% url 'message_create' %}" class="text-white fw-bold">Новое сообщение</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+            <form action="filtermessages" method="get">
+                <div class="col-md-6 px-0">
+                    <div> Оценка:
+                        <select name="mark" >
+                            {% for mark in view.get_mark %}
+                                <option label="{{mark.1}}" value="{{mark.0}}" selected>{{mark.1}}</option>
+                            {%endfor%}
+                            <option label="" value="" selected> </option>
+                        </select>
+                    </div>
+                    <div> Канал обращения:
+                            {% for channel in view.get_channel %}
+                                <li>
+                                    <input type="checkbox" name="channel" value="{{channel.0}}">{{channel.1}}
+                                </li>
+                            {% endfor %}
+                    </div>
+                    <div> Менеджер:
+                        <select name="manager" >
+                            {% for manager in view.get_manager %}
+                                <option value="{{manager.id}}" selected>{{manager.first_name}} {{manager.last_name}}</option>
+                            {%endfor%}
+                            <option label="" value="0" selected></option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit">Найти</button>
+                    </div>
+                </div>
+            </form>
+    </div>
+</div>
+<div class="container">
+    {% if messages_list %}
+    <div class="row mb-2">
+        {% for message in messages_list %}
+            <div class="col-md-7">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        {% if message.new_message %}<strong><li style="color:red;">Новое!</li></strong>{%endif%}
+                        <h5 class="mb-0">{{ message.title }}</h5>
+                        <div class="mb-1 text-muted">Заказ: {{ message.order.name }}</div>
+                        <div class="mb-1 text-muted">Дата публикации: {{ message.pub_date }}</div>
+                        <p class="card-text mb-auto">Компания: {{ message.order.company.name }}</p>
+                        <p class="card-text mb-auto">Текст сообщения: {{message.description}}</p>
+                        <p><strong>Имя менеджера:</strong><a href="{{ message.manager.userprofile.get_absolute_url }}"> {{ message.manager.first_name }} {{ message.manager.last_name }}</a></p>
+                        <p><strong>Оценка обращения:</strong> {{message.get_mark_display}}</p>
+                        <a href="{{ message.get_absolute_url }}" class="stretched-link">Просмотр</a>
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+    {% else %}
+    <p>Заказов нет.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base_generic.html" %}
+{% block title %}Заказы{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">Наши заказы</h1>
+            <p class="lead mb-0"><a href="{% url 'order_create' %}" class="text-white fw-bold">Добавить новый заказ</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+            <form action="filter" method="get">
+                <div class="col-md-6 px-0">
+                    <div> СОРТ: <input type="input" name="sort"> </div>
+                    <div> Компания:
+                        <select name="company" >
+                            {% for company in view.get_company %}
+                                <option label="{{company.name}}" value="{{company.id}}" selected>{{company.name}}</option>
+                            {%endfor%}
+                            <option label="" value="0" selected></option>
+                        </select>
+                    </div>
+                    <div> Объем меда:
+                            <input type="input" name="amount" value="0">
+                    </div>
+                    <div> Цена:
+                        <input type="input" name="price" value="0">
+                    </div>
+                    <div> Статус выполнения:
+                        <select name="done" >
+                            {% for done in view.get_done %}
+                                <option value="{{done.0}}" selected>{{done.1}}</option>
+                            {%endfor%}
+                            <option label="" value="" selected> </option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit">Найти</button>
+                    </div>
+                </div>
+            </form>
+    </div>
+</div>
+<div class="container">
+    {% if orders_list %}
+    <div class="row mb-2">
+        {% for order in orders_list %}
+            <div class="col-md-7">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-0 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h3 class="mb-0">{{ order.name }}</h3>
+                        <div class="mb-1 text-muted">Дата начала договора: {{ order.date_of_start }}</div>
+                        <div class="mb-1 text-muted">Дата окончания: {{ order.date_of_end }}</div>
+                        <p class="card-text mb-auto">Описание заказа: {{ order.short_description }}</p>
+                        <p class="card-text mb-auto">Статус выполнения: {{ order.get_done_display }}</p>
+                        <a href="{{ order.get_absolute_url }}" class="stretched-link">Просмотр</a>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <a href="{% url 'order_done' order.pk %}">Изменить статус</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <a href="{% url 'order_delete' order.pk %}"><strong>Удалить заказ</strong></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+    {% else %}
+    <p>Заказов нет.</p>
+    {% endif %}
+</div>
+{% endblock %}

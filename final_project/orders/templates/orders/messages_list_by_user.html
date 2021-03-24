@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+{% block title %}Мои сообщения{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">Мои ообщения</h1>
+            <p class="lead mb-0"><a href="{% url 'message_create' %}" class="text-white fw-bold">Новое сообщение</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    {% if messages_list %}
+    <div class="row mb-2">
+        {% for message in messages_list %}
+        <div class="col-md-7">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-0 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    {% if message.new_message %}<strong>
+                    <li style="color:red;">Новое!</li>
+                </strong>{%endif%}
+                    <h5 class="mb-0">{{ message.title }}</h5>
+                    <div class="mb-1 text-muted">Заказ: {{ message.order.name }}</div>
+                    <div class="mb-1 text-muted">Дата публикации: {{ message.pub_date }}</div>
+                    <p class="card-text mb-auto">Компания: {{ message.order.company.name }}</p>
+                    <p class="card-text mb-auto">Текст сообщения: {{message.description}}</p>
+                    <p><strong>Оценка обращения:</strong> {{message.get_mark_display}}</p>
+                    <a href="{{ message.get_absolute_url }}" class="stretched-link">Просмотр</a>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'message_update' message.pk %}">Редактировать сообщение</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'message_delete' message.pk %}"><strong>Удалить сообщение</strong></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {%endfor%}
+    </div>
+    {% else %}
+    <p>Заказов нет.</p>
+    {% endif %}
+</div>
+{% endblock %}

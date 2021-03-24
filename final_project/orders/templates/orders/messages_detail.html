@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+{% block title %} {{ orders.name }} {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">{{messages.title}}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-10 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <p><strong>Заказ:</strong><a href="{{ messages.order.get_absolute_url }}">{{messages.order.name}}</a></p>
+                    <p><strong>Компания:</strong><a href="{{ messages.order.company.get_absolute_url }}">{{messages.order.company.name}}</a></p>
+                    <p><strong>Канал обращения:</strong>{{messages.get_channel_display}}</p>
+                    <p><strong>Имя менеджера:</strong><a href="{{ messages.manager.userprofile.get_absolute_url }}"> {{ messages.manager.first_name }} {{ messages.manager.last_name }}</a></p>
+                    <p><strong>Описание:</strong> {{ messages.description }}</p>
+                    <p><strong>Оценка обращения:</strong>{{messages.get_mark_display}}</p>
+                    <p><strong>Дата публикации:</strong> {{ messages.pub_date }}</p>
+                </div>
+            </div>
+            {% if messages.manager == user %}
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'message_update' messages.pk %}">Редатировать сообщение</a>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+</div>
+{%endblock%}

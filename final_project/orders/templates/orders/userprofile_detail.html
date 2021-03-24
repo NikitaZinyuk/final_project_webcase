@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+{% block title %}Профиль {{ userprofile.user.first_name }} {{ userprofile.user.last_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">Профиль {{ userprofile.user.first_name }} {{ userprofile.user.last_name }}</h1>
+            {% if user == userprofile.user %}
+              <p class="lead mb-0"><a href="{% url 'edit-profile' %}" class="text-white fw-bold">Редактировать мой профиль</a>
+            {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+          {% if userprofile.photo %}
+            <p><img src="{{userprofile.photo.url}}" width="200" height="200" alt=""></p>
+          {% endif %}
+            <p><strong>Номер телефона:</strong> {{ userprofile.phonenumber }}</p>
+            <p><strong>Почта:</strong> {{userprofile.user.email}}</p>
+            <p><strong>Дата рождения:</strong> {{userprofile.date_of_birth}}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

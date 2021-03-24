@@ -1,0 +1,40 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">{{ task.name }}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-10 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                  <p><strong>Задание:</strong> {{ tasks.task }}</p>
+                  <p><strong>Дата выдачи задания:</strong> {{ tasks.pub_date }}</p>
+                  <p><strong>Дата оконочания выполнения задания:</strong> {{ tasks.end_date }}</p>
+                  <p><strong>Исполнители:</strong> {{ tasks.display_excutors }}</p>
+                  <p><strong>Выполнение:</strong> {{ tasks.get_done_display }}</p>
+                </div>
+            </div>
+            {% if perms.orders.can_view_list_of_companies %}
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'task_update' tasks.pk %}">Редактировать задание</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'task_delete' tasks.pk %}"><strong>Удалить задание</strong></a>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+</div>
+{% endblock %}

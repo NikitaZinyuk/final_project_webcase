@@ -1,0 +1,70 @@
+{% extends "base_generic.html" %}
+{% block title %}{{ suppliers }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">{{ suppliers.last_name }} {{ suppliers.first_name }} {{ suppliers.patronymic }}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-10 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <p><strong>Телефоны:</strong>{% for number in suppliers.phonenumberssupp_set.all %} {{ number }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                    <p><strong>Сорт меда:</strong> {{ suppliers.sort }}</p>
+                    <p><strong>Количество меда в килограммах:</strong> {{ suppliers.amount }} кг</p>
+                    <p><strong>Цена, которую объявили поставщику:</strong> {{ suppliers.price }} грн/кг</p>
+                    <p><strong>Статус анализа:</strong> {{ suppliers.get_status_of_analysis_display }}</p>
+                    <p><strong>Дата вывоза:</strong> {{ suppliers.date_of_export }}</p>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'supplier_update' suppliers.pk %}">Редактировать информацию</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'supplier_delete' suppliers.pk %}"><strong>Удалить поставщика</strong></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<h2>Заказы в которых участвует поставщик</h2>
+<div class="container">
+    <div class="row mb-2">
+        {% for order in suppliers.orders_set.all %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-0 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <h3 class="mb-0">{{ order.name }}</h3>
+                    <div class="mb-1 text-muted">Дата начала договора: {{ order.date_of_start }}</div>
+                    <div class="mb-1 text-muted">Дата окончания: {{ order.date_of_end }}</div>
+                    <p class="card-text mb-auto">Описание заказа: {{ order.short_description }}</p>
+                    <p class="card-text mb-auto">Статус выполнения: {{ order.get_done_display }}</p>
+                    <a href="{{ order.get_absolute_url }}" class="stretched-link">Просмотр</a>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'order_done' order.pk %}">Изменить статус</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'order_delete' order.pk %}"><strong>Удалить заказ</strong></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+{% endblock %}

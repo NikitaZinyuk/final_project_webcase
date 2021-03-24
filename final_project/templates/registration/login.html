@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+  <p>Неправильно ввели логин или пароль.</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Вы не имеете прав на просмотр этой страницы. Пожалуйста авторизуйтесь.</p>
+  {% else %}
+    <p>Пожалуйста, авторизуйтесь для просморта этой страницы.</p>
+  {% endif %}
+{% endif %}
+
+<link href="signin.css" rel="stylesheet">
+  </head>
+  <body class="text-center">
+
+<main class="form-signin">
+  <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Пожалуйста, авторизуйтесь</h1>
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    {{ form.password.label_tag }}
+    {{ form.password }}
+    <input type="submit" value="Войти"/>
+    <input type="hidden" name="next" value="{{ next }}" />
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+  </form>
+</main>
+  </body>
+
+{% endblock %}

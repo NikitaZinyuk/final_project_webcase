@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+<h1>Сайт компании экспортера, главная страница</h1>
+
+<h2>Информация для посетителей</h2>
+
+  <ul>
+    <li><strong>Количество компаний, с которыми мы сотрудничаем:</strong> {{ num_companies }}</li>
+    <li><strong>Количество выполненых заказов:</strong> {{ num_orders }}</li>
+    <li><strong>Количество поставщиков:</strong> {{ num_suppliers }}</li>
+  </ul>
+  <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+
+{% endblock %}

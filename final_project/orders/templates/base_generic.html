@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.rtl.min.css' %}" type="text/css">
+
+
+</head>
+<body>
+
+<div class="wrapper">
+    {% include 'navbar.html' %}
+    <div class="wrapper-content">
+        <div class="container-fluid">
+            <div class="row">
+                {% if user.is_authenticated %}
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div class="position-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{% url 'home' %}">
+                                    Главная
+                                </a>
+                                {% if perms.orders.can_view_list_of_companies %}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'companies' %}">
+                                    Компании
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'orders' %}">
+                                    Заказы
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'messages' %}">
+                                    Все сообщения
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'tasks' %}">
+                                    Задания для персонала
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'suppliers' %}">
+                                    Поставщики
+                                </a>
+                            </li>
+                        </ul>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Данные пользователя</span>
+                        </h6>
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'my-messages' %}">
+                                    Мои сообщения
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profile' user.userprofile.pk %}">
+                                    Мой профиль
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if perms.orders.can_view_my_tasks %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'my-tasks' %}">
+                                    Мои задания
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </nav>
+                {% endif %}
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    {% block content %}
+                    {% endblock %}
+                    {% block pagination %}
+                        {% if is_paginated %}
+                            <div class="pagination">
+                                <span class="page-links">
+                                    {% if page_obj.has_previous %}
+                                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                                    {% endif %}
+                                <span class="page-current">
+                                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                                </span>
+                                    {% if page_obj.has_next %}
+                                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </main>
+            </div>
+        </div>
+        {% include 'footer.html' %}
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "base_generic.html" %}
+{% block title %}Задания для персонала{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">Задания для персонала</h1>
+            {% if perms.orders.can_view_list_of_companies %}
+                <p class="lead mb-0"><a href="{% url 'task_create' %}" class="text-white fw-bold">Новое задание</a>
+            {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <form action="{% url 'searchtask' %}" method="get">
+            <div class="col-md-6 px-0">
+                <div> Поиск по названию:
+                    <input type="search" placeholder="Введите название" name="search" class="form-control" required="">
+                </div>
+                <div>
+                    <button type="submit">Найти</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% if tasks_list %}
+<div class="row mb-2">
+    {% for task in tasks_list %}
+    <div class="col-md-7">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-0 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <h3 class="mb-0">{{ task.name }}</h3>
+                <p class="card-text mb-auto">Статус выполнения: {{ task.get_done_display }}</p>
+                <p class="card-text mb-auto">Исполнители: {{ task.display_excutors }}</p>
+                <a href="{{ task.get_absolute_url }}" class="stretched-link">Просмотр</a>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <a href="{% url 'task_update_by_worker' task.pk %}">Изменить статус</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <a href="{% url 'task_delete' task.pk %}"><strong>Удалить задание</strong></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+{% else %}
+<p>Заданий нет.</p>
+{% endif %}
+</div>
+{% endblock %}

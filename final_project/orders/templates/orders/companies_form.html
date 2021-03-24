@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <h2>Номера телефонов</h2>
+    {{ phonenumbers.as_p }}
+    <h2>Емейлы</h2>
+    {{ emails.as_p }}
+    <input type="submit" value="Применить изменения" />
+
+</form>
+{% endblock %}

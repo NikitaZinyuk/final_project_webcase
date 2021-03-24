@@ -1,0 +1,70 @@
+{% extends "base_generic.html" %}
+{% block title %} {{ orders.name }} {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">{{ orders.name }}</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-10 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <p><strong>Компания:</strong><a href="{{ orders.company.get_absolute_url }}"> {{ orders.company }}</a></p>
+                    <p><strong>Описание:</strong>{{ orders.short_description }}</p>
+                    <p><strong>Дата начала договора:</strong> {{ orders.date_of_start }}</p>
+                    <p><strong>Дата окончания договора:</strong> {{ orders.date_of_end }}</p>
+                    <p><strong>Сорт меда:</strong> {{ orders.sort }}</p>
+                    <p><strong>Количество:</strong> {{ orders.amount }} кг</p>
+                    <p><strong>Цена за килограмм:</strong> {{ orders.price }} грн/кг</p>
+                    <p><strong>Общая сумма:</strong>{{orders.summary}} грн.</p>
+                    <p><strong>Поставщики:</strong> {% for supplier in orders.suppliers.all %} <a href="{{ supplier.get_absolute_url }}">{{ supplier }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                    <p><strong>Статус выполнения:</strong> {{orders.get_done_display}}</p>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'order_update' orders.pk %}">Редактировать информацию</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'order_done' orders.pk %}">Изменить статус</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <a href="{% url 'order_delete' orders.pk %}"><strong>Удалить заказ</strong></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<h2>Сообщения по заказу</h2>
+<div class="container">
+    <div class="row mb-2">
+        {% for message in orders.messages_set.all %}
+            <div class="col-md-6">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        {% if message.new_message %}<strong><li style="color:red;">Новое!</li></strong>{%endif%}
+                        <h5 class="mb-0">{{ message.title }}</h5>
+                        <div class="mb-1 text-muted">Заказ: {{ message.order.name }}</div>
+                        <div class="mb-1 text-muted">Дата публикации: {{ message.pub_date }}</div>
+                        <p class="card-text mb-auto">Компания: {{ message.order.company.name }}</p>
+                        <p class="card-text mb-auto">Текст сообщения: {{message.description}}</p>
+                        <p><strong>Имя менеджера:</strong><a href="{{ message.manager.userprofile.get_absolute_url }}"> {{ message.manager.first_name }} {{ message.manager.last_name }}</a></p>
+                        <p><strong>Оценка обращения:</strong> {{message.get_mark_display}}</p>
+                        <a href="{{ message.get_absolute_url }}" class="stretched-link">Просмотр</a>
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+</div>
+{% endblock %}

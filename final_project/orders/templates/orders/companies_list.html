@@ -1,0 +1,64 @@
+{% extends "base_generic.html" %}
+{% block title %}Список компаний{% endblock %}
+{% block content %}
+<main class="container">
+    <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-10 fst-italic">Компании с которыми мы сотрудничаем</h1>
+            <p class="lead mb-0"><a href="{% url 'company_create' %}" class="text-white fw-bold">Добавить новую
+                компанию</a></p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+            <form action="{% url 'searchcomp' %}" method="get">
+                <div class="col-md-6 px-0">
+                    <div> Поиск по названию:
+                        <input type="search" placeholder="Введите название" name="search" class="form-control" required="">
+                    </div>
+                    <div>
+                        <button type="submit">Найти</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="p-4 p-md-10 mb-4 text-white rounded bg-dark">
+            <form action="{% url 'companies' %}" method="get">
+                <div class="col-md-6 px-0">
+                    <div> Сортировка по названию:
+                        <select name="order" >
+                            <option label="В алфавитном порядке" value="name" selected>В алфавитном порядке</option>
+                            <option label="В обратном порядке" value="-name" selected>В обратном порядке</option>
+                            <option label="По дате" value="pub_date" selected>По дате записи</option>
+                            <option label="По дате в обратном порядке" value="-pub_date" selected>По дате записи в обратном порядке</option>
+                            <option label="По дате изменения" value="change_date" selected>По дате изменения записи</option>
+                            <option label="" value="" selected></option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit">Сортировать</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if companies_list %}
+    <div class="row mb-2">
+        <div class="col-md-6">
+            {% for company in companies_list %}
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <h3 class="mb-0">{{ company.name }}</h3>
+                    <div class="mb-1 text-muted">{{ company.pub_date }}</div>
+                    <p class="card-text mb-auto">{{ company.description }}</p>
+                    <a href="{{ company.get_absolute_url }}" class="stretched-link">Детальный просмотр</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Компаний партнеров нет.</p>
+        {% endif %}
+        {% endblock %}
